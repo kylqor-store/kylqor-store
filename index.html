@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#080808"><title>KYLQOR — Beyond Ordinary</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header class="topbar">
+  <a class="wordmark" href="#">KYLQOR<span>®</span></a>
+  <nav><a href="#shop">SHOP</a><a href="#story">OUR WORLD</a></nav>
+  <button class="cart-btn" id="cartOpen">BAG <span id="cartCount">0</span></button>
+</header>
+<main>
+  <section class="hero">
+    <div class="hero-copy"><p class="eyebrow">INDEPENDENT STREETWEAR · INDIA</p>
+      <h1>BEYOND<br><em>ORDINARY.</em></h1>
+      <p class="hero-sub">Built for those who move differently.</p>
+      <a class="light-btn" href="#shop">EXPLORE THE DROP <span>↗</span></a>
+    </div>
+    <div class="hero-art"><div class="orbit"></div><div class="hero-mark">K<span>/</span>Q</div><p>DROP 001 — 2026</p></div>
+  </section>
+  <section class="ticker"><span>NO LIMITS — NO ORDINARY — KYLQOR — </span><span>NO LIMITS — NO ORDINARY — KYLQOR — </span></section>
+  <section class="shop section" id="shop">
+    <div class="section-head"><div><p class="eyebrow">THE FIRST DROP</p><h2>SELECT YOUR<br><em>STANDARD.</em></h2></div><p class="muted">Designed to stand apart.<br>Made to be worn your way.</p></div>
+    <div class="products" id="products"></div>
+  </section>
+  <section class="story section" id="story"><p class="eyebrow">THE KYLQOR MINDSET</p><h2>POWER IN<br><em>EVERY DETAIL.</em></h2><p class="muted">A new independent label. A different point of view. This is only the beginning.</p></section>
+</main>
+<footer><a class="wordmark" href="#">KYLQOR<span>®</span></a><p>BEYOND ORDINARY.</p><small>© 2026 KYLQOR. All rights reserved.</small></footer>
+
+<div class="drawer-backdrop" id="backdrop"></div>
+<aside class="drawer" id="drawer">
+  <div class="drawer-head"><h3>YOUR BAG</h3><button id="cartClose" aria-label="Close">✕</button></div>
+  <div id="cartItems" class="cart-items"><p class="muted">Your bag is empty.</p></div>
+  <div class="cart-total"><span>SUBTOTAL</span><strong id="subtotal">₹0</strong></div>
+  <button class="primary-btn" id="checkoutOpen">CONTINUE TO CHECKOUT</button>
+</aside>
+
+<div class="modal-backdrop" id="checkoutBackdrop">
+  <form class="checkout" id="checkoutForm">
+    <div class="drawer-head"><h3>CHECKOUT</h3><button type="button" id="checkoutClose">✕</button></div>
+    <p class="muted tiny">Enter accurate delivery details. All prices are in INR.</p>
+    <label>Full name<input name="name" required maxlength="80" autocomplete="name"></label>
+    <label>Mobile number<input name="phone" required inputmode="numeric" pattern="[6-9][0-9]{9}" placeholder="10-digit Indian mobile" autocomplete="tel"></label>
+    <label>Delivery address<textarea name="address" required maxlength="500" autocomplete="street-address"></textarea></label>
+    <div class="two"><label>City<input name="city" required autocomplete="address-level2"></label><label>PIN code<input name="pincode" required inputmode="numeric" pattern="[0-9]{6}" autocomplete="postal-code"></label></div>
+    <label>Payment method<select name="payment" required><option value="cod">Cash on Delivery</option><option value="online">Online payment</option></select></label>
+    <div class="cart-total"><span>TOTAL</span><strong id="checkoutTotal">₹0</strong></div>
+    <button class="primary-btn" type="submit">PLACE ORDER</button>
+    <p class="tiny muted" id="checkoutMessage">Online payment will activate after the secure payment gateway is configured.</p>
+  </form>
+</div>
+<script src="app.js"></script>
+</body></html>
