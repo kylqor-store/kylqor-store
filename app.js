@@ -4,7 +4,7 @@ const SUPABASE_PUBLISHABLE_KEY =
   "sb_publishable_4ftlK6R__1_dkLUuoWu1fQ_mvIF1f-t";
 
 // Public anon key used by your existing Supabase function.
-const SUPABASE_ANON_KEY = "PASTE_YOUR_EXISTING_LEGACY_ANON_KEY_HERE";
+const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9ldmptanNxZmN1ZmR0aXRvdm5jIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTM1ODQwODEsImV4cCI6MjEwOTE2MDA4MX0.UWijvZ9SRNR2wFf6y_y7bHoxxtXIGl62KclMYicAo_I";
 
 const PRODUCTS = {
   "tee-001": { name: "DROP 001 — GRAPHIC TEE", price: 799 },
