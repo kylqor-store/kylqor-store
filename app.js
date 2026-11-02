@@ -2,8 +2,8 @@
 // KYLQOR — Supabase-connected storefront
 
 const SUPABASE_URL = "https://oevjmjsqfcufdtitovnc.supabase.co";
-const SUPABASE_PUBLISHABLE_KEY = "PASTE_YOUR_SB_PUBLISHABLE_KEY_HERE";
-const SUPABASE_ANON_KEY = "PASTE_YOUR_LEGACY_ANON_KEY_HERE";
+const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_4ftlK6R__1_dkLUuoWu1fQ_mvIF1f-t";
+const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9ldmptanNxZmN1ZmR0aXRvdm5jIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTM1ODQwODEsImV4cCI6MjEwOTE2MDA4MX0.UWijvZ9SRNR2wFf6y_y7bHoxxtXIGl62KclMYicAo_I";
 
 const PRODUCTS = [
   { id: "tee-001", name: "DROP 001 — GRAPHIC TEE", price: 799, tag: "240 GSM · OVERSIZED" },
