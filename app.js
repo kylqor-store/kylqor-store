@@ -1,183 +1,134 @@
 
-// KYLQOR — Supabase-connected storefront
-
 const SUPABASE_URL = "https://oevjmjsqfcufdtitovnc.supabase.co";
-const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_4ftlK6R__1_dkLUuoWu1fQ_mvIF1f-t";
-const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9ldmptanNxZmN1ZmR0aXRvdm5jIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTM1ODQwODEsImV4cCI6MjEwOTE2MDA4MX0.UWijvZ9SRNR2wFf6y_y7bHoxxtXIGl62KclMYicAo_I";
+const SUPABASE_PUBLISHABLE_KEY =
+  "sb_publishable_4ftlK6R__1_dkLUuoWu1fQ_mvIF1f-t";
 
-const PRODUCTS = [
-  { id: "tee-001", name: "DROP 001 — GRAPHIC TEE", price: 799, tag: "240 GSM · OVERSIZED" },
-  { id: "tee-002", name: "DROP 001 — SIGNATURE TEE", price: 799, tag: "240 GSM · OVERSIZED" }
-];
+// Public anon key used by your existing Supabase function.
+const SUPABASE_ANON_KEY = "PASTE_YOUR_EXISTING_LEGACY_ANON_KEY_HERE";
 
-let cart = [];
+const PRODUCTS = {
+  "tee-001": { name: "DROP 001 — GRAPHIC TEE", price: 799 },
+  "tee-002": { name: "DROP 001 — SIGNATURE TEE", price: 799 }
+};
 
-const money = n => "₹" + Number(n).toLocaleString("en-IN");
-const $ = id => document.getElementById(id);
+let cart = {};
 
-function renderProducts() {
-  $("products").innerHTML = PRODUCTS.map(p => `
-    <article>
-      <div class="product-image"><div class="shirt-shape"></div></div>
-      <div class="product-info">
-        <div>
-          <h3>${p.name}</h3>
-          <p>${p.tag} · ${money(p.price)}</p>
-        </div>
-        <button class="add-btn" data-add="${p.id}">ADD TO BAG +</button>
-      </div>
-    </article>
-  `).join("");
+function addToCart(id) {
+  if (!PRODUCTS[id]) return;
+
+  const currentTotal = Object.values(cart).reduce((sum, qty) => sum + qty, 0);
+
+  if (currentTotal >= 5) {
+    alert("Maximum 5 items per order.");
+    return;
+  }
+
+  cart[id] = (cart[id] || 0) + 1;
+  renderCart();
 }
 
 function renderCart() {
-  $("cartCount").textContent = cart.reduce((s, i) => s + i.qty, 0);
+  const summary = document.getElementById("cart-summary");
+  if (!summary) return;
 
-  $("cartItems").innerHTML = cart.length
-    ? cart.map(i => `
-      <div class="cart-row">
-        <span>${i.name}<br>
-          <small class="muted">${i.qty} × ${money(i.price)}</small>
-        </span>
-        <span>${money(i.qty * i.price)}
-          <button data-remove="${i.id}">✕</button>
-        </span>
-      </div>
-    `).join("")
-    : '<p class="muted">Your bag is empty.</p>';
-
-  const total = cart.reduce((s, i) => s + i.price * i.qty, 0);
-  $("subtotal").textContent = money(total);
-  $("checkoutTotal").textContent = money(total);
-}
-
-function openCart() {
-  $("drawer").classList.add("open");
-  $("backdrop").classList.add("open");
-}
-
-function closeCart() {
-  $("drawer").classList.remove("open");
-  $("backdrop").classList.remove("open");
-}
-
-$("products").addEventListener("click", e => {
-  const id = e.target.dataset.add;
-  if (!id) return;
-
-  const product = PRODUCTS.find(p => p.id === id);
-  const found = cart.find(p => p.id === id);
-
-  found ? found.qty++ : cart.push({ ...product, qty: 1 });
-
-  renderCart();
-  openCart();
-});
-
-$("cartItems").addEventListener("click", e => {
-  const id = e.target.dataset.remove;
-  if (id) {
-    cart = cart.filter(i => i.id !== id);
-    renderCart();
+  const ids = Object.keys(cart);
+  if (!ids.length) {
+    summary.textContent = "Your cart is empty.";
+    return;
   }
-});
 
-$("cartOpen").onclick = openCart;
-$("cartClose").onclick = closeCart;
-$("backdrop").onclick = closeCart;
+  let total = 0;
+  const lines = ids.map(id => {
+    const item = PRODUCTS[id];
+    total += item.price * cart[id];
+    return `${item.name} × ${cart[id]} — ₹${item.price * cart[id]}`;
+  });
 
-$("checkoutOpen").onclick = () => {
-  if (!cart.length) return;
-  closeCart();
-  $("checkoutBackdrop").classList.add("open");
-};
+  summary.textContent = `${lines.join(" | ")} | Total: ₹${total}`;
+}
 
-$("checkoutClose").onclick = () => {
-  $("checkoutBackdrop").classList.remove("open");
-};
+const form = document.getElementById("checkout-form");
 
-// Submit order to Supabase
-$("checkoutForm").addEventListener("submit", async e => {
-  e.preventDefault();
+if (form) {
+  form.addEventListener("submit", async event => {
+    event.preventDefault();
 
-  if (!cart.length) return;
+    const message = document.getElementById("order-message");
+    const button = form.querySelector('button[type="submit"]');
 
-  const form = e.currentTarget;
-  const submitButton = form.querySelector('[type="submit"]');
-  const message = $("checkoutMessage");
+    const turnstileResponse =
+      form.querySelector('[name="cf-turnstile-response"]')?.value;
 
-  if (submitButton) submitButton.disabled = true;
-  message.textContent = "Submitting your order...";
-
-  try {
-    const data = Object.fromEntries(new FormData(form).entries());
-
-    // COD only until online payment is configured
-    if (String(data.payment).toLowerCase() !== "cod") {
-      message.textContent =
-        "Online payment is not active yet. Please select COD.";
+    if (!turnstileResponse) {
+      message.textContent = "Please complete the security check.";
       return;
     }
 
-    const digits = String(data.phone || "")
-      .replace(/\D/g, "")
-      .replace(/^91/, "");
-
-    if (digits.length !== 10) {
-      message.textContent = "Enter a valid 10-digit phone number.";
+    if (Object.keys(cart).length === 0) {
+      message.textContent = "Your cart is empty.";
       return;
     }
 
-    const order = {
-      customer: {
-        name: String(data.name || "").trim(),
-        phone: "+91" + digits,
-        address: String(data.address || "").trim(),
-        city: String(data.city || "").trim(),
-        pincode: String(data.pincode || "").trim(),
-        payment: "COD"
-      },
-      items: cart.map(item => ({
-        id: item.id,
-        qty: item.qty
-      })),
-      payment_method: "COD"
-    };
+    const name = document.getElementById("customer-name").value.trim();
+    const phone = document.getElementById("phone").value.trim();
+    const address = document.getElementById("address").value.trim();
+    const city = document.getElementById("city").value.trim();
+    const pincode = document.getElementById("pincode").value.trim();
 
-    const response = await fetch(
-      `${SUPABASE_URL}/functions/v1/dynamic-responder`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "apikey": SUPABASE_PUBLISHABLE_KEY,
-          "Authorization": `Bearer ${SUPABASE_ANON_KEY}`
-        },
-        body: JSON.stringify(order)
+    button.disabled = true;
+    message.textContent = "Submitting your order...";
+
+    try {
+      const response = await fetch(
+        `${SUPABASE_URL}/functions/v1/dynamic-responder`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "apikey": SUPABASE_PUBLISHABLE_KEY,
+            "Authorization": `Bearer ${SUPABASE_ANON_KEY}`
+          },
+          body: JSON.stringify({
+            customer: {
+              name,
+              phone,
+              address,
+              city,
+              pincode,
+              payment: "COD"
+            },
+            items: Object.entries(cart).map(([id, qty]) => ({ id, qty })),
+            payment_method: "COD",
+            turnstileToken: turnstileResponse
+          })
+        }
+      );
+
+      const result = await response.json();
+
+      if (!response.ok || !result.success) {
+        throw new Error(result.error || "Could not place order.");
       }
-    );
 
-    const result = await response.json();
+      message.textContent =
+        `Order received! Order ID: ${result.order_id} · Total: ₹${result.total_amount}`;
 
-    if (!response.ok || !result.success) {
-      throw new Error(result.error || "Could not submit your order.");
+      cart = {};
+      renderCart();
+      form.reset();
+
+      if (window.turnstile) {
+        window.turnstile.reset();
+      }
+    } catch (error) {
+      message.textContent = error.message || "Checkout failed. Please try again.";
+      if (window.turnstile) {
+        window.turnstile.reset();
+      }
+    } finally {
+      button.disabled = false;
     }
+  });
+}
 
-    message.textContent =
-      `Order received! Order ID: ${result.order_id} · Total: ${money(result.total_amount)}`;
-
-    cart = [];
-    renderCart();
-    form.reset();
-
-  } catch (error) {
-    console.error("KYLQOR checkout:", error);
-    message.textContent =
-      error.message || "Something went wrong. Please try again.";
-  } finally {
-    if (submitButton) submitButton.disabled = false;
-  }
-});
-
-renderProducts();
 renderCart();
