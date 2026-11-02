@@ -1,55 +1,170 @@
-<!doctype html>
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-  <meta name="theme-color" content="#080808"><title>KYLQOR — Beyond Ordinary</title>
-  <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#080808">
+  <title>KYLQOR — Beyond Ordinary</title>
+  <meta name="description" content="KYLQOR premium unisex streetwear. Beyond Ordinary.">
+
+  <script
+    src="https://challenges.cloudflare.com/turnstile/v0/api.js"
+    async
+    defer
+  ></script>
+
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: #080808;
+      color: #fff;
+      font-family: Arial, sans-serif;
+    }
+    header {
+      padding: 24px;
+      border-bottom: 1px solid #292929;
+      text-align: center;
+    }
+    .logo {
+      font-size: 30px;
+      font-weight: 900;
+      letter-spacing: 7px;
+    }
+    .tagline {
+      color: #999;
+      font-size: 11px;
+      letter-spacing: 4px;
+      margin-top: 9px;
+    }
+    main {
+      width: min(900px, 92%);
+      margin: 55px auto;
+    }
+    h1 {
+      font-size: clamp(32px, 7vw, 60px);
+      letter-spacing: 3px;
+      text-align: center;
+    }
+    .subtitle {
+      color: #aaa;
+      text-align: center;
+      margin-bottom: 45px;
+    }
+    .products {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 20px;
+    }
+    .product {
+      background: #141414;
+      border: 1px solid #303030;
+      padding: 25px;
+    }
+    .product h2 { font-size: 19px; }
+    .price { color: #ccc; font-size: 20px; }
+    button {
+      background: #fff;
+      color: #080808;
+      border: 0;
+      padding: 14px 20px;
+      font-weight: bold;
+      cursor: pointer;
+      width: 100%;
+    }
+    .checkout {
+      margin-top: 45px;
+      padding: 25px;
+      background: #141414;
+      border: 1px solid #303030;
+    }
+    input, textarea {
+      width: 100%;
+      padding: 14px;
+      margin: 8px 0 15px;
+      background: #080808;
+      border: 1px solid #444;
+      color: white;
+    }
+    label { color: #ccc; font-size: 13px; }
+    .captcha { margin: 20px 0; }
+    footer {
+      text-align: center;
+      padding: 30px;
+      color: #777;
+      border-top: 1px solid #292929;
+    }
+  </style>
 </head>
+
 <body>
-<header class="topbar">
-  <a class="wordmark" href="#">KYLQOR<span>®</span></a>
-  <nav><a href="#shop">SHOP</a><a href="#story">OUR WORLD</a></nav>
-  <button class="cart-btn" id="cartOpen">BAG <span id="cartCount">0</span></button>
-</header>
-<main>
-  <section class="hero">
-    <div class="hero-copy"><p class="eyebrow">INDEPENDENT STREETWEAR · INDIA</p>
-      <h1>BEYOND<br><em>ORDINARY.</em></h1>
-      <p class="hero-sub">Built for those who move differently.</p>
-      <a class="light-btn" href="#shop">EXPLORE THE DROP <span>↗</span></a>
-    </div>
-    <div class="hero-art"><div class="orbit"></div><div class="hero-mark">K<span>/</span>Q</div><p>DROP 001 — 2026</p></div>
-  </section>
-  <section class="ticker"><span>NO LIMITS — NO ORDINARY — KYLQOR — </span><span>NO LIMITS — NO ORDINARY — KYLQOR — </span></section>
-  <section class="shop section" id="shop">
-    <div class="section-head"><div><p class="eyebrow">THE FIRST DROP</p><h2>SELECT YOUR<br><em>STANDARD.</em></h2></div><p class="muted">Designed to stand apart.<br>Made to be worn your way.</p></div>
-    <div class="products" id="products"></div>
-  </section>
-  <section class="story section" id="story"><p class="eyebrow">THE KYLQOR MINDSET</p><h2>POWER IN<br><em>EVERY DETAIL.</em></h2><p class="muted">A new independent label. A different point of view. This is only the beginning.</p></section>
-</main>
-<footer><a class="wordmark" href="#">KYLQOR<span>®</span></a><p>BEYOND ORDINARY.</p><small>© 2026 KYLQOR. All rights reserved.</small></footer>
+  <header>
+    <div class="logo">KYLQOR</div>
+    <div class="tagline">BEYOND ORDINARY..</div>
+  </header>
 
-<div class="drawer-backdrop" id="backdrop"></div>
-<aside class="drawer" id="drawer">
-  <div class="drawer-head"><h3>YOUR BAG</h3><button id="cartClose" aria-label="Close">✕</button></div>
-  <div id="cartItems" class="cart-items"><p class="muted">Your bag is empty.</p></div>
-  <div class="cart-total"><span>SUBTOTAL</span><strong id="subtotal">₹0</strong></div>
-  <button class="primary-btn" id="checkoutOpen">CONTINUE TO CHECKOUT</button>
-</aside>
+  <main>
+    <h1>THE NEW STANDARD.</h1>
+    <p class="subtitle">Premium unisex streetwear.</p>
 
-<div class="modal-backdrop" id="checkoutBackdrop">
-  <form class="checkout" id="checkoutForm">
-    <div class="drawer-head"><h3>CHECKOUT</h3><button type="button" id="checkoutClose">✕</button></div>
-    <p class="muted tiny">Enter accurate delivery details. All prices are in INR.</p>
-    <label>Full name<input name="name" required maxlength="80" autocomplete="name"></label>
-    <label>Mobile number<div class="phone-field"><span>+91</span><input name="phone" required inputmode="numeric" type="tel" pattern="[6-9][0-9]{9}" minlength="10" maxlength="10" placeholder="10-digit mobile number" autocomplete="tel"></div></label>
-    <label>Delivery address<textarea name="address" required maxlength="500" autocomplete="street-address"></textarea></label>
-    <div class="two"><label>City<input name="city" required autocomplete="address-level2"></label><label>PIN code<input name="pincode" required inputmode="numeric" pattern="[0-9]{6}" autocomplete="postal-code"></label></div>
-    <label>Payment method<select name="payment" required><option value="cod">Cash on Delivery</option><option value="online">Online payment</option></select></label>
-    <div class="cart-total"><span>TOTAL</span><strong id="checkoutTotal">₹0</strong></div>
-    <button class="primary-btn" type="submit">PLACE ORDER</button>
-    <p class="tiny muted" id="checkoutMessage">Online payment will activate after the secure payment gateway is configured.</p>
-  </form>
-</div>
-<script src="app.js"></script>
-</body></html>
+    <section class="products">
+      <article class="product">
+        <h2>DROP 001 — GRAPHIC TEE</h2>
+        <p class="price">₹799</p>
+        <button type="button" onclick="addToCart('tee-001')">
+          ADD TO CART
+        </button>
+      </article>
+
+      <article class="product">
+        <h2>DROP 001 — SIGNATURE TEE</h2>
+        <p class="price">₹799</p>
+        <button type="button" onclick="addToCart('tee-002')">
+          ADD TO CART
+        </button>
+      </article>
+    </section>
+
+    <section class="checkout">
+      <h2>YOUR CHECKOUT</h2>
+      <p id="cart-summary">Your cart is empty.</p>
+
+      <form id="checkout-form">
+        <label for="customer-name">Full name</label>
+        <input id="customer-name" name="name" required maxlength="100">
+
+        <label for="phone">Phone number (+91)</label>
+        <input id="phone" name="phone" placeholder="+91XXXXXXXXXX" required>
+
+        <label for="address">Full address</label>
+        <textarea id="address" name="address" required maxlength="300"></textarea>
+
+        <label for="city">City</label>
+        <input id="city" name="city" required maxlength="80">
+
+        <label for="pincode">PIN code</label>
+        <input id="pincode" name="pincode" inputmode="numeric"
+          pattern="[0-9]{6}" required>
+
+        <div class="captcha">
+          <div
+            class="cf-turnstile"
+            data-sitekey="0x4AAAAAAFwdrKRj8oDOORop"
+          ></div>
+        </div>
+
+        <button type="submit">PLACE COD ORDER</button>
+      </form>
+
+      <p id="order-message" aria-live="polite"></p>
+    </section>
+  </main>
+
+  <footer>
+    KYLQOR © 2026 — BEYOND ORDINARY..
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
