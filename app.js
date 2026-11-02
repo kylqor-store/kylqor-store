@@ -145,7 +145,7 @@ $("checkoutForm").addEventListener("submit", async e => {
     };
 
     const response = await fetch(
-      `${SUPABASE_URL}/functions/v1/create-order`,
+      `${SUPABASE_URL}/functions/v1/dynamic-responder`,
       {
         method: "POST",
         headers: {
